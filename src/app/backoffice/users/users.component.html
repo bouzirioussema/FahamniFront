@@ -1,0 +1,186 @@
+<!-- Users Management Section -->
+<section class="users-section">
+  <div class="section-header">
+    <div class="header-left-section">
+      <h2>User Management</h2>
+      <div class="filters-inline">
+        <div class="search-box">
+          <i class="material-icons">search</i>
+          <input 
+            type="text" 
+            placeholder="Search users..." 
+            [(ngModel)]="searchTerm"
+            (input)="filterUsers()">
+        </div>
+        
+        <select [(ngModel)]="selectedRole" (change)="filterUsers()" class="role-filter">
+          <option value="">All Roles</option>
+          <option value="ADMIN">Admin</option>
+          <option value="TEACHER">Teacher</option>
+          <option value="STUDENT">Student</option>
+        </select>
+      </div>
+    </div>
+    
+    <button class="btn btn-primary" (click)="openUserForm()">
+      <i class="material-icons">add</i>
+      Add New User
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading users...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="alert alert-error">
+    <i class="material-icons">error</i>
+    {{ error }}
+  </div>
+
+  <!-- Success Message -->
+  <div *ngIf="success" class="alert alert-success">
+    <i class="material-icons">check_circle</i>
+    {{ success }}
+  </div>
+
+  <!-- Users Table -->
+  <div class="users-table-container" *ngIf="!loading">
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of filteredUsers" class="user-row">
+          <td class="user-cell">
+            <div class="user-info-cell">
+              <div class="user-avatar-small" [style.background-color]="getUserAvatarColor(user.username)">
+                {{ getInitials(user.username) }}
+              </div>
+              <div class="user-text">
+                <span class="user-name">{{ user.username }}</span>
+              </div>
+            </div>
+          </td>
+          <td class="email-cell">{{ user.email }}</td>
+          <td class="role-cell">
+            <span class="role-badge" [ngClass]="getRoleBadgeClass(user.role)">
+              {{ user.role }}
+            </span>
+          </td>
+          <td class="status-cell">
+            <span class="status-badge" [ngClass]="user.emailVerified ? 'status-active' : 'status-inactive'">
+              {{ user.emailVerified ? 'Verified' : 'Unverified' }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <div class="action-buttons">
+              <button class="btn-action btn-edit" (click)="openUserForm(user)" title="Edit User">
+                <i class="material-icons">edit</i>
+              </button>
+              <button class="btn-action btn-toggle" (click)="toggleUserStatus(user)" 
+                      [title]="user.emailVerified ? 'Disable User' : 'Enable User'">
+                <i class="material-icons">toggle_on</i>
+              </button>
+              <button class="btn-action btn-delete" (click)="deleteUser(user)" title="Delete User">
+                <i class="material-icons">delete</i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Empty State -->
+    <div *ngIf="filteredUsers.length === 0" class="empty-state">
+      <i class="material-icons">people_outline</i>
+      <h3>No users found</h3>
+      <p>Try adjusting your search or filters</p>
+    </div>
+  </div>
+</section>
+
+<!-- Add New User Modal -->
+<div *ngIf="showUserForm" class="modal-backdrop">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2>{{ editingUser ? 'Edit User' : 'Add New User' }}</h2>
+      <button class="close-button" (click)="closeUserForm()">×</button>
+    </div>
+    
+    <form class="user-form" (ngSubmit)="saveUser()">
+      <div class="form-field">
+        <label>Username</label>
+        <input 
+          type="text" 
+          [(ngModel)]="userForm.username" 
+          name="username"
+          placeholder="Enter username"
+          required>
+      </div>
+      
+      <div class="form-field">
+        <label>Email</label>
+        <input 
+          type="email" 
+          [(ngModel)]="userForm.email" 
+          name="email"
+          placeholder="Enter email"
+          required>
+      </div>
+      
+      <div class="form-field" *ngIf="!editingUser">
+        <label>Password</label>
+        <input 
+          type="password" 
+          [(ngModel)]="userForm.password" 
+          name="password"
+          placeholder="Enter password"
+          required>
+      </div>
+      
+      <div class="form-field">
+        <label>Role</label>
+        <select [(ngModel)]="userForm.role" name="role" required>
+          <option value="">Select Role</option>
+          <option value="ADMIN">Admin</option>
+          <option value="TEACHER">Teacher</option>
+          <option value="STUDENT">Student</option>
+        </select>
+      </div>
+      
+      <div class="form-buttons">
+        <button type="button" class="cancel-btn" (click)="closeUserForm()">Cancel</button>
+        <button type="submit" class="submit-btn">{{ editingUser ? 'Update User' : 'Create User' }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div *ngIf="showDeleteConfirm" class="modal-backdrop">
+  <div class="delete-modal">
+    <div class="delete-header">
+      <h3>⚠️ Confirm Delete</h3>
+    </div>
+    
+    <div class="delete-content">
+      <p>Are you sure you want to delete user <strong>"{{ userToDelete?.username }}"</strong>?</p>
+      <p class="warning-text">This action cannot be undone.</p>
+    </div>
+    
+    <div class="delete-buttons">
+      <button type="button" class="cancel-btn" (click)="closeDeleteConfirm()">Cancel</button>
+      <button type="button" class="delete-btn" (click)="confirmDelete()">Delete User</button>
+    </div>
+  </div>
+</div>
+

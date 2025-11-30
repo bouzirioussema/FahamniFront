@@ -1,0 +1,87 @@
+<!-- Dashboard Container -->
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <i class="material-icons">school</i>
+        <span>EduStage</span>
+      </div>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <ul class="nav-menu">
+        <li class="nav-item" [class.active]="isActiveRoute('/backoffice/dashboard')">
+          <a routerLink="/backoffice/dashboard" class="nav-link" (click)="navigateToAbsolute('/backoffice/dashboard')">
+            <i class="material-icons">dashboard</i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item" [class.active]="isActiveRoute('/backoffice/users')">
+          <a routerLink="/backoffice/users" class="nav-link" (click)="navigateToAbsolute('/backoffice/users'); $event.preventDefault()">
+            <i class="material-icons">people</i>
+            <span>Users</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="material-icons">school</i>
+            <span>Courses</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="material-icons">event</i>
+            <span>Reservations</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="material-icons">settings</i>
+            <span>Settings</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    
+    <!-- Logout at bottom of sidebar -->
+    <div class="sidebar-footer">
+      <button class="sidebar-logout-btn" (click)="logout()">
+        <i class="material-icons">logout</i>
+        <span>Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    <!-- Header -->
+    <header class="dashboard-header">
+      <div class="header-content">
+        <div class="header-left">
+          <h1 class="dashboard-title">
+            <i class="material-icons">dashboard</i>
+            Admin Dashboard
+          </h1>
+          <p class="dashboard-subtitle">User Management System</p>
+        </div>
+        <div class="header-right">
+          <div class="user-info">
+            <div class="user-avatar" [style.background-color]="getUserAvatarColor(currentUser.username)">
+              {{ getInitials(currentUser.username) }}
+            </div>
+            <div class="user-details">
+              <span class="user-name">{{ currentUser.username }}</span>
+              <span class="user-role">{{ currentUser.role }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

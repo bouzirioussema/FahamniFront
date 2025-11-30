@@ -1,0 +1,89 @@
+/* Main Button Area css
+============================================================================================ */
+.primary-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 0px 48px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 50px;
+  border-radius: 5px;
+  outline: none !important;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  @include transition();
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  &:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    color: #ffffff;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    transform: translateY(-2px);
+  }
+}
+.primary-btn2 {
+  display: inline-block;
+  background: transparent;
+  padding: 0px 48px;
+  color: #667eea;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 48px;
+  border-radius: 5px;
+  border: 2px solid #667eea;
+  outline: none !important;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  @include transition();
+  &:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #ffffff;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  }
+}
+.logout-btn:hover {
+  background: transparent !important;
+  color: #667eea !important;
+  border: 2px solid #667eea !important;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3) !important;
+  transform: translateY(-2px) !important;
+}
+.white_bg_btn {
+  background: #fff;
+  display: inline-block;
+  color: $title-color;
+  line-height: 40px;
+  padding: 0px 28px;
+  font-size: 14px;
+  font-family: $primary-font;
+  font-weight: 500;
+  text-transform: uppercase;
+  @include transition;
+  border: none;
+  &:hover {
+    background: $primary-color;
+    color: #fff;
+  }
+}
+.blog_btn {
+  border: 1px solid #eeeeee;
+  background: #f1f9ff;
+  padding: 0px 32px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: $primary-font;
+  color: $title-color;
+  line-height: 34px;
+  display: inline-block;
+  &:hover {
+    background: $primary-color;
+    border-color: $primary-color;
+    color: $title-color;
+  }
+}
+
+/* End Main Button Area css
+============================================================================================ */

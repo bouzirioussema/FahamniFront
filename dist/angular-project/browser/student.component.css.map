@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/student/student.component.css"],
+  "sourcesContent": ["/* Mobile Responsive Styles */\n@media (max-width: 768px) {\n  /* Profile dropdown adjustments for mobile */\n  .profile-dropdown {\n    min-width: 180px !important;\n    right: 0 !important;\n    left: auto !important;\n  }\n\n  /* Banner text adjustments */\n  .home_banner_area .banner_inner .banner_content h2 {\n    font-size: 28px !important;\n  }\n\n  .home_banner_area .banner_inner .banner_content h3 {\n    font-size: 18px !important;\n  }\n\n  /* Navigation adjustments */\n  .navbar-nav {\n    background: white;\n    padding: 10px;\n  }\n\n  .navbar-nav .nav-item {\n    margin: 5px 0;\n  }\n}\n\n@media (max-width: 576px) {\n  /* Extra small devices */\n  .profile-dropdown {\n    min-width: 160px !important;\n    font-size: 11px !important;\n  }\n\n  .home_banner_area .banner_inner .banner_content h2 {\n    font-size: 22px !important;\n  }\n\n  .home_banner_area .banner_inner .banner_content h3 {\n    font-size: 16px !important;\n  }\n}"],
+  "mappings": ";AACA,OAAO,CAAC,SAAS,EAAE;AAEjB,GAAC;AACC,eAAW;AACX,WAAO;AACP,UAAM;AACR;AAGA,GAAC,iBAAiB,CAAC,aAAa,CAAC,eAAe;AAC9C,eAAW;AACb;AAEA,GAJC,iBAIiB,CAJC,aAIa,CAJC,eAIe;AAC9C,eAAW;AACb;AAGA,GAAC;AACC,gBAAY;AACZ,aAAS;AACX;AAEA,GALC,WAKW,CAAC;AACX,YAAQ,IAAI;AACd;AACF;AAEA,OAAO,CAAC,SAAS,EAAE;AAEjB,GA5BC;AA6BC,eAAW;AACX,eAAW;AACb;AAEA,GA1BC,iBA0BiB,CA1BC,aA0Ba,CA1BC,eA0Be;AAC9C,eAAW;AACb;AAEA,GA9BC,iBA8BiB,CA9BC,aA8Ba,CA9BC,eA8Be;AAC9C,eAAW;AACb;AACF;",
+  "names": []
+}

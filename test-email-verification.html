@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Email Verification API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .api-info {
+            background: #e2e3e5;
+            color: #383d41;
+            border: 1px solid #d6d8db;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test de l'API Email Verification</h1>
+    
+    <div class="api-info">
+        <h3>Informations importantes :</h3>
+        <p><strong>Backend URL:</strong> http://localhost:8082</p>
+        <p><strong>Note:</strong> Les codes de vérification sont affichés dans la console du backend (pas d'envoi réel d'email)</p>
+        <p><strong>Expiration:</strong> Les codes expirent après 24 heures</p>
+    </div>
+
+    <!-- Test Registration -->
+    <div class="test-section">
+        <h2>1. Test d'enregistrement (génère un code de vérification)</h2>
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" value="testuser" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="test@example.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" value="password123" required>
+            </div>
+            
+            <button type="submit">1. Créer un compte</button>
+        </form>
+        
+        <div id="registerResult" class="result" style="display: none;"></div>
+    </div>
+
+    <!-- Test Email Verification -->
+    <div class="test-section">
+        <h2>2. Test de vérification d'email</h2>
+        <form id="verifyForm">
+            <div class="form-group">
+                <label for="verifyEmail">Email:</label>
+                <input type="email" id="verifyEmail" name="verifyEmail" value="test@example.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="verificationCode">Code de vérification:</label>
+                <input type="text" id="verificationCode" name="verificationCode" placeholder="Entrez le code reçu" maxlength="6" required>
+            </div>
+            
+            <button type="submit">2. Vérifier l'email</button>
+        </form>
+        
+        <div id="verifyResult" class="result" style="display: none;"></div>
+    </div>
+
+    <!-- Test Resend Code -->
+    <div class="test-section">
+        <h2>3. Test de renvoi de code</h2>
+        <form id="resendForm">
+            <div class="form-group">
+                <label for="resendEmail">Email:</label>
+                <input type="email" id="resendEmail" name="resendEmail" value="test@example.com" required>
+            </div>
+            
+            <button type="submit">3. Renvoyer le code</button>
+        </form>
+        
+        <div id="resendResult" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Test 1: Registration
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            const resultDiv = document.getElementById('registerResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'Envoi de la requête d\'enregistrement...';
+            
+            try {
+                const response = await fetch('http://localhost:8082/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                const data = await response.text();
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ Enregistrement réussi!\nStatus: ${response.status}\nMessage: ${data}\n\n⚠️ IMPORTANT: Vérifiez la console du backend pour voir le code de vérification!`;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ Erreur d'enregistrement!\nStatus: ${response.status}\nMessage: ${data}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Erreur de connexion!\n${error.message}\n\nAssurez-vous que le backend Spring Boot est démarré sur le port 8082.`;
+            }
+        });
+
+        // Test 2: Email Verification
+        document.getElementById('verifyForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('verifyEmail').value;
+            const verificationCode = document.getElementById('verificationCode').value;
+            
+            const resultDiv = document.getElementById('verifyResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'Vérification de l\'email...';
+            
+            try {
+                const response = await fetch('http://localhost:8082/api/auth/verify-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        verificationCode: verificationCode
+                    })
+                });
+                
+                const data = await response.text();
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ Email vérifié avec succès!\nStatus: ${response.status}\nMessage: ${data}`;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ Erreur de vérification!\nStatus: ${response.status}\nMessage: ${data}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Erreur de connexion!\n${error.message}`;
+            }
+        });
+
+        // Test 3: Resend Code
+        document.getElementById('resendForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('resendEmail').value;
+            
+            const resultDiv = document.getElementById('resendResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'Envoi d\'un nouveau code...';
+            
+            try {
+                const response = await fetch('http://localhost:8082/api/auth/resend-verification', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email
+                    })
+                });
+                
+                const data = await response.text();
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ Nouveau code envoyé!\nStatus: ${response.status}\nMessage: ${data}\n\n⚠️ IMPORTANT: Vérifiez la console du backend pour voir le nouveau code!`;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ Erreur lors de l'envoi!\nStatus: ${response.status}\nMessage: ${data}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Erreur de connexion!\n${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Admin Dashboard - Fahamni</title>
+  <link rel="stylesheet" href="../../assets/css/bootstrap.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <style>
+    .admin-container {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px 0;
+    }
+    .admin-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    .admin-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+    }
+    .stats-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .user-table {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .table th {
+      background: #f8f9fa;
+      border: none;
+      font-weight: 600;
+      color: #495057;
+    }
+    .role-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+    }
+    .status-badge {
+      padding: 4px 8px;
+      border-radius: 15px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .btn-action {
+      padding: 5px 10px;
+      margin: 2px;
+      border-radius: 5px;
+      font-size: 12px;
+    }
+    .search-filters {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .modal-content {
+      border-radius: 15px;
+      border: none;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .modal-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 15px 15px 0 0;
+    }
+    .alert {
+      border-radius: 10px;
+      border: none;
+    }
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body>
+<div class="admin-container">
+  <div class="container-fluid">
+    
+    <!-- Header -->
+    <div class="admin-card mb-4">
+      <div class="admin-header">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <h2 class="mb-0">
+              <i class="ti-dashboard mr-2"></i>
+              Admin Dashboard
+            </h2>
+            <p class="mb-0 mt-1 opacity-75">User Management System</p>
+          </div>
+          <div class="col-md-6 text-right">
+            <div class="d-flex align-items-center justify-content-end">
+              <div class="mr-3">
+                <div class="d-flex align-items-center">
+                  <div class="admin-avatar mr-2" 
+                       style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                    {{adminInitials}}
+                  </div>
+                  <div>
+                    <div style="font-size: 14px; font-weight: 600;">{{adminUsername}}</div>
+                    <div style="font-size: 12px; opacity: 0.8;">{{adminEmail}}</div>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-light btn-sm" (click)="logout()">
+                <i class="ti-power-off mr-1"></i>
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <div class="stats-card">
+          <div style="color: #667eea; font-size: 24px; margin-bottom: 10px;">
+            <i class="ti-user"></i>
+          </div>
+          <h4 class="mb-1">{{users.length}}</h4>
+          <p class="text-muted mb-0">Total Users</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stats-card">
+          <div style="color: #2563eb; font-size: 24px; margin-bottom: 10px;">
+            <i class="ti-book"></i>
+          </div>
+          <h4 class="mb-1">{{(users | filter: 'role' : 'TEACHER').length}}</h4>
+          <p class="text-muted mb-0">Teachers</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stats-card">
+          <div style="color: #059669; font-size: 24px; margin-bottom: 10px;">
+            <i class="ti-user"></i>
+          </div>
+          <h4 class="mb-1">{{(users | filter: 'role' : 'STUDENT').length}}</h4>
+          <p class="text-muted mb-0">Students</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stats-card">
+          <div style="color: #dc2626; font-size: 24px; margin-bottom: 10px;">
+            <i class="ti-crown"></i>
+          </div>
+          <h4 class="mb-1">{{(users | filter: 'role' : 'ADMIN').length}}</h4>
+          <p class="text-muted mb-0">Admins</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alerts -->
+    <div *ngIf="error" class="alert alert-danger alert-dismissible fade show">
+      <i class="ti-alert-circle mr-2"></i>
+      {{error}}
+      <button type="button" class="close" (click)="error = ''">
+        <span>&times;</span>
+      </button>
+    </div>
+
+    <div *ngIf="success" class="alert alert-success alert-dismissible fade show">
+      <i class="ti-check mr-2"></i>
+      {{success}}
+      <button type="button" class="close" (click)="success = ''">
+        <span>&times;</span>
+      </button>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="search-filters">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group mb-0">
+            <label class="small text-muted mb-1">Search Users</label>
+            <input type="text" 
+                   class="form-control" 
+                   placeholder="Search by name or email..."
+                   [(ngModel)]="searchTerm"
+                   (input)="onSearchChange()">
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group mb-0">
+            <label class="small text-muted mb-1">Filter by Role</label>
+            <select class="form-control" 
+                    [(ngModel)]="selectedRole"
+                    (change)="onRoleFilterChange()">
+              <option value="">All Roles</option>
+              <option value="ADMIN">Admin</option>
+              <option value="TEACHER">Teacher</option>
+              <option value="STUDENT">Student</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-5 d-flex align-items-end">
+          <button class="btn btn-primary mr-2" (click)="openUserForm()">
+            <i class="ti-plus mr-1"></i>
+            Add New User
+          </button>
+          <button class="btn btn-outline-secondary" (click)="loadUsers()">
+            <i class="ti-reload mr-1"></i>
+            Refresh
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="user-table">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>User</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="loading">
+              <td colspan="6" class="text-center py-4">
+                <div class="loading-spinner"></div>
+                <span class="ml-2">Loading users...</span>
+              </td>
+            </tr>
+            <tr *ngIf="!loading && filteredUsers.length === 0">
+              <td colspan="6" class="text-center py-4 text-muted">
+                <i class="ti-user-plus" style="font-size: 48px; opacity: 0.3;"></i>
+                <div class="mt-2">No users found</div>
+              </td>
+            </tr>
+            <tr *ngFor="let user of filteredUsers">
+              <td class="align-middle">
+                <strong>#{{user.id}}</strong>
+              </td>
+              <td class="align-middle">
+                <div class="d-flex align-items-center">
+                  <div class="user-avatar mr-2" 
+                       style="width: 35px; height: 35px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 600;">
+                    {{getInitials(user.username)}}
+                  </div>
+                  <div>
+                    <div class="font-weight-bold">{{user.username}}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="align-middle">
+                <span class="text-muted">{{user.email}}</span>
+              </td>
+              <td class="align-middle">
+                <span class="role-badge" [style.background-color]="getRoleColor(user.role)">
+                  {{user.role}}
+                </span>
+              </td>
+              <td class="align-middle">
+                <span class="status-badge" 
+                      [class]="user.emailVerified ? 'bg-success text-white' : 'bg-warning text-dark'">
+                  {{user.emailVerified ? 'Verified' : 'Pending'}}
+                </span>
+              </td>
+              <td class="align-middle">
+                <button class="btn btn-info btn-action" 
+                        (click)="openUserForm(user)"
+                        title="Edit User">
+                  <i class="ti-pencil"></i>
+                </button>
+                <button class="btn btn-warning btn-action" 
+                        (click)="toggleUserStatus(user)"
+                        title="Toggle Status">
+                  <i class="ti-reload"></i>
+                </button>
+                <button class="btn btn-danger btn-action" 
+                        (click)="deleteUser(user)"
+                        title="Delete User">
+                  <i class="ti-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- User Form Modal -->
+<div class="modal fade" [class.show]="showUserForm" [style.display]="showUserForm ? 'block' : 'none'" 
+     style="background: rgba(0,0,0,0.5);" *ngIf="showUserForm">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="ti-user mr-2"></i>
+          {{editingUser ? 'Edit User' : 'Add New User'}}
+        </h5>
+        <button type="button" class="close text-white" (click)="closeUserForm()">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="saveUser()">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Username *</label>
+                <input type="text" 
+                       class="form-control" 
+                       [(ngModel)]="userForm.username"
+                       name="username"
+                       required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Email *</label>
+                <input type="email" 
+                       class="form-control" 
+                       [(ngModel)]="userForm.email"
+                       name="email"
+                       required>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Password {{editingUser ? '(leave blank to keep current)' : '*'}}</label>
+                <input type="password" 
+                       class="form-control" 
+                       [(ngModel)]="userForm.password"
+                       name="password"
+                       [required]="!editingUser">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Role *</label>
+                <select class="form-control" 
+                        [(ngModel)]="userForm.role"
+                        name="role"
+                        required>
+                  <option value="STUDENT">Student</option>
+                  <option value="TEACHER">Teacher</option>
+                  <option value="ADMIN">Admin</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="text-right mt-4">
+            <button type="button" class="btn btn-secondary mr-2" (click)="closeUserForm()">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="loading">
+              <span *ngIf="loading" class="loading-spinner mr-2"></span>
+              {{editingUser ? 'Update User' : 'Create User'}}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

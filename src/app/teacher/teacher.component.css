@@ -1,0 +1,67 @@
+
+/* Navbar styling */
+.navbar {
+  background-color: #007bff; /* Navbar background color */
+}
+
+.navbar-brand,
+.navbar-nav .nav-link {
+  color: #fff; /* Navbar text color */
+}
+
+.navbar-toggler-icon {
+  color: #fff; /* Navbar toggler icon color */
+}
+
+/* Active link styling */
+.nav-item.active .nav-link {
+  font-weight: bold; /* Make active link text bold */
+}
+
+/* Container padding */
+/* Removed padding-top to match home page header position */
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  /* Profile dropdown adjustments for mobile */
+  .profile-dropdown {
+    min-width: 180px !important;
+    right: 0 !important;
+    left: auto !important;
+  }
+
+  /* Banner text adjustments */
+  .home_banner_area .banner_inner .banner_content h2 {
+    font-size: 28px !important;
+  }
+
+  .home_banner_area .banner_inner .banner_content h3 {
+    font-size: 18px !important;
+  }
+
+  /* Navigation adjustments */
+  .navbar-nav {
+    background: white;
+    padding: 10px;
+  }
+
+  .navbar-nav .nav-item {
+    margin: 5px 0;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Extra small devices */
+  .profile-dropdown {
+    min-width: 160px !important;
+    font-size: 11px !important;
+  }
+
+  .home_banner_area .banner_inner .banner_content h2 {
+    font-size: 22px !important;
+  }
+
+  .home_banner_area .banner_inner .banner_content h3 {
+    font-size: 16px !important;
+  }
+}

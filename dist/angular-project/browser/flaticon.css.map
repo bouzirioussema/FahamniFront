@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/assets/css/flaticon.css"],
+  "sourcesContent": ["/*\n  Flaticon icon font: Flaticon\n  Creation date: 20/01/2019 08:29\n*/\n\n@font-face {\n  font-family: \"Flaticon\";\n  src: url(\"/assets/fonts/Flaticon.eot\");\n  src: url(\"/assets/fonts/Flaticon.eot?#iefix\") format(\"embedded-opentype\"),\n  url(\"/assets/fonts/Flaticon.woff2\") format(\"woff2\"),\n  url(\"/assets/fonts/Flaticon.woff\") format(\"woff\"),\n  url(\"/assets/fonts/Flaticon.ttf\") format(\"truetype\");\n  font-weight: normal;\n  font-style: normal;\n}\n\n@media screen and (-webkit-min-device-pixel-ratio:0) {\n  @font-face {\n    font-family: \"Flaticon\";\n  }\n}\n\n[class^=\"flaticon-\"]:before, [class*=\" flaticon-\"]:before,\n[class^=\"flaticon-\"]:after, [class*=\" flaticon-\"]:after {\n  font-family: Flaticon;\n  font-size: 48px;\n  font-style: normal;\n  margin-left: 0px;\n  color: #002347;\n}\n\n.flaticon-student:before { content: \"\\f100\"; }\n.flaticon-book:before { content: \"\\f101\"; }\n.flaticon-earth:before { content: \"\\f102\"; }\n"],
+  "mappings": ";AAKA;AACE,eAAa;AACb,OAAK;AACL;AAAA,IAAK,uCAAyC,OAAO,oBAAoB;AAAA,IACzE,kCAAoC,OAAO,QAAQ;AAAA,IACnD,iCAAmC,OAAO,OAAO;AAAA,IACjD,gCAAkC,OAAO;AACzC,eAAa;AACb,cAAY;AACd;AAEA,OAAO,OAAO,IAAI,CAAC,8BAA8B,CAAC;AAChD;AACE,iBAAa;AACf;AACF;AAEA,CAAC,iBAAmB;AAAS,CAAC,oBAAoB;AAClD,CAAC,iBAAmB;AAAQ,CAAC,oBAAoB;AAC/C,eAAa;AACb,aAAW;AACX,cAAY;AACZ,eAAa;AACb,SAAO;AACT;AAEA,CAAC,gBAAgB;AAAU,WAAS;AAAS;AAC7C,CAAC,aAAa;AAAU,WAAS;AAAS;AAC1C,CAAC,cAAc;AAAU,WAAS;AAAS;",
+  "names": []
+}

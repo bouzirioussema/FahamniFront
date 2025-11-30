@@ -1,0 +1,80 @@
+/* Additional custom styles for admin component */
+.admin-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.user-avatar:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+.btn-action:hover {
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+.stats-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.role-badge.admin {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+}
+
+.role-badge.teacher {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+.role-badge.student {
+  background: linear-gradient(135deg, #059669, #047857);
+}
+
+.modal.show {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.alert {
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .admin-header .text-right {
+    text-align: left !important;
+    margin-top: 15px;
+  }
+  
+  .stats-card {
+    margin-bottom: 15px;
+  }
+  
+  .search-filters .col-md-5 {
+    margin-top: 15px;
+  }
+  
+  .btn-action {
+    margin-bottom: 5px;
+  }
+}
