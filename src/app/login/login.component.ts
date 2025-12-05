@@ -34,8 +34,8 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Check if user was redirected from email verification
     this.route.queryParams.subscribe(params => {
+      // Check if user was redirected from email verification
       if (params['verified'] === 'true') {
         this.successMessage = 'Email verified successfully! Please log in to continue.';
         // Clear the query parameter from URL
@@ -54,6 +54,38 @@ export class LoginComponent implements OnInit {
         setTimeout(() => {
           this.successMessage = '';
         }, 5000);
+      }
+
+      // Handle OAuth2 login redirect with token and user info
+      if (params['token'] && params['userId'] && params['role']) {
+        const token = params['token'];
+        const userId = params['userId'];
+        const role = params['role'];
+        const username = params['username'];
+
+        localStorage.setItem('jwtToken', token);
+        localStorage.setItem('userId', userId);
+        localStorage.setItem('role', role);
+
+        if (username) {
+          localStorage.setItem('username', username);
+        }
+
+        // Navigate based on role, same logic as normal login
+        if (role === 'ROLE_ADMIN') {
+          this.router.navigate(['/backoffice/dashboard']);
+        } else if (role === 'ROLE_STUDENT') {
+          this.router.navigate(['/student', userId]);
+        } else if (role === 'ROLE_TEACHER') {
+          this.router.navigate(['/teacher', userId]);
+        }
+
+        // Clear query parameters from URL after processing
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: {},
+          replaceUrl: true
+        });
       }
     });
   }

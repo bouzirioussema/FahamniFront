@@ -1,0 +1,122 @@
+<div class="ctp-wrapper">
+  <div class="ctp-card">
+    <!-- En-tête avec logo -->
+    <div class="ctp-header">
+      <div class="ctp-logo-row">
+        <div class="ctp-logo-icon"></div>
+        <div class="ctp-logo-text">
+          <span class="main">ClicToPay</span><span class="ext">.com.tn</span><br />
+          <span class="sub">by Monétique Tunisie</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Corps -->
+    <div class="ctp-body">
+      <h2 class="ctp-title">Numéro de la commande</h2>
+      <div class="ctp-order-number">
+        {{ orderCode }}
+      </div>
+      <div class="ctp-session-info">
+        Il reste jusqu'à la fin de la session
+        <strong>{{ timerMinutes }} min. {{ timerSeconds }} sec.</strong>
+      </div>
+
+      <form (ngSubmit)="submit()" #paymentForm="ngForm" class="ctp-form">
+        <div class="ctp-form-group">
+          <label>Numéro de la carte</label>
+          <div class="ctp-input-with-icon">
+            <span class="icon">💳</span>
+            <input
+              type="text"
+              name="cardNumber"
+              [(ngModel)]="cardNumber"
+              (input)="onCardNumberInput($event)"
+              required
+              placeholder="Numéro de la carte"
+            />
+          </div>
+        </div>
+
+        <div class="ctp-form-row">
+          <div class="ctp-form-group">
+            <label>Mois</label>
+            <select name="expiryMonth" [(ngModel)]="expiryMonth">
+              <option value="">Mois</option>
+              <option *ngFor="let m of ['01','02','03','04','05','06','07','08','09','10','11','12']" [value]="m">
+                {{ m }}
+              </option>
+            </select>
+          </div>
+          <div class="ctp-form-group">
+            <label>Année</label>
+            <select name="expiryYear" [(ngModel)]="expiryYear">
+              <option value="">Année</option>
+              <option *ngFor="let y of ['2025','2026','2027','2028','2029','2030']" [value]="y">
+                {{ y }}
+              </option>
+            </select>
+          </div>
+          <div class="ctp-form-group">
+            <label>Code de sûreté</label>
+            <input
+              type="password"
+              name="cvv"
+              [(ngModel)]="cvv"
+              maxlength="4"
+              required
+              placeholder="Code de sûreté"
+            />
+          </div>
+        </div>
+
+        <div class="ctp-form-group">
+          <label>Le nom du détenteur</label>
+          <input
+            type="text"
+            name="cardHolderName"
+            [(ngModel)]="cardHolderName"
+            required
+            placeholder="Le nom du détenteur"
+          />
+        </div>
+
+        <div class="ctp-form-group">
+          <label class="ctp-email-label">
+            <input type="checkbox" checked disabled />
+            Adresse e-mail
+          </label>
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            required
+            placeholder="exemple@domaine.com"
+          />
+        </div>
+
+        <button type="submit" class="ctp-submit" [disabled]="saving">
+          Paiement {{ amountLabel }}
+        </button>
+      </form>
+
+      <div class="ctp-message error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+      <div class="ctp-success-overlay" *ngIf="successMessage">
+        <div class="ctp-success-modal">
+          <div class="ctp-success-icon-wrap">
+            <div class="ctp-success-icon">✓</div>
+          </div>
+          <h3 class="ctp-success-title">Thank You!</h3>
+          <p class="ctp-success-text">
+            {{ successMessage }}
+          </p>
+          <button type="button" class="ctp-success-button" (click)="successMessage = null">
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

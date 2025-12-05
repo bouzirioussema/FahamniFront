@@ -1,6 +1,12 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import {AuthService} from "../login/AuthService";
+import { AuthService } from '../login/AuthService';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ImageCropperComponent } from 'ngx-image-cropper';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { Course } from '../course/course';
+import { CourseService } from '../course/CourseService';
 
 interface Teacher {
   id: number;
@@ -15,10 +21,21 @@ interface Teacher {
   rating?: number;
 }
 
+interface CoursePreview {
+  id: number;
+  title: string;
+  category: string;
+  level: string;
+  durationInHours: number;
+  imageUrl: string;
+}
+
 @Component({
   selector: 'app-student',
   templateUrl: './student.component.html',
-  styleUrls: ['./student.component.css']
+  styleUrls: ['./student.component.css'],
+  standalone: true,
+  imports: [CommonModule, ImageCropperComponent, RouterLink]
 })
 export class StudentComponent implements OnInit, AfterViewInit {
   userId!: string;
@@ -26,6 +43,13 @@ export class StudentComponent implements OnInit, AfterViewInit {
   email: string = 'student@email.com';
   role: string = 'Student';
   initials: string = 'SN';
+  profileImageUrl: string | null = null;
+  // State for image cropping
+  showCropper: boolean = false;
+  imageChangedEvent: any = '';
+  croppedFile: File | null = null;
+  
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   
   teachers: Teacher[] = [
     {
@@ -102,12 +126,22 @@ export class StudentComponent implements OnInit, AfterViewInit {
     }
   ];
 
+  courses: Course[] = [];
+  previewCourses: CoursePreview[] = [];
 
-  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) { }
+  private apiUrl = 'http://localhost:8082/api';
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private courseService: CourseService
+  ) { }
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.userId = params['user_id'];
+    this.route.params.subscribe((params: any) => {
+      this.userId = params['userId'];
     });
     
     // Get user info from localStorage
@@ -126,10 +160,17 @@ export class StudentComponent implements OnInit, AfterViewInit {
     
     if (storedRole) {
       // Remove ROLE_ prefix if present and format
-      let roleText = storedRole.replace('ROLE_', '');
+      const roleText = storedRole.replace('ROLE_', '');
       // Capitalize first letter and make rest lowercase
       this.role = roleText.charAt(0).toUpperCase() + roleText.slice(1).toLowerCase();
     }
+
+    if (this.userId) {
+      this.setProfileImageUrl();
+    }
+
+    // Charger les cours publiés pour alimenter la section de prévisualisation (6 max)
+    this.loadPreviewCourses();
   }
   
   getInitials(name: string): string {
@@ -199,4 +240,120 @@ export class StudentComponent implements OnInit, AfterViewInit {
   getStarArray(_rating: number): number[] {
     return Array(5).fill(0).map((_, i) => i + 1);
   }
+
+  private loadPreviewCourses(): void {
+    this.courseService.getAllCourses().subscribe({
+      next: (allCourses: Course[]) => {
+        const published = allCourses.filter(course => course.published);
+        this.courses = published;
+        const topSix = published.slice(0, 6);
+        this.previewCourses = topSix.map(course => ({
+          id: course.id,
+          title: course.title,
+          category: course.category,
+          level: course.level,
+          durationInHours: course.durationInHours,
+          imageUrl: course.imageUrl
+        }));
+      },
+      error: (err) => {
+        console.error('Error loading preview courses:', err);
+      }
+    });
+  }
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('jwtToken');
+    const headersConfig: any = {};
+    if (token) {
+      headersConfig['Authorization'] = `Bearer ${token}`;
+    }
+    return new HttpHeaders(headersConfig);
+  }
+
+  private setProfileImageUrl(): void {
+    this.profileImageUrl = `${this.apiUrl}/users/${this.userId}/profile-image?t=${Date.now()}`;
+  }
+
+  onProfileImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0 || !this.userId) {
+      return;
+    }
+    // Open cropper with selected image instead of uploading directly
+    this.imageChangedEvent = event;
+    this.showCropper = true;
+  }
+
+  // Alias for onProfileImageSelected to match template
+  onFileSelected(event: Event): void {
+    this.onProfileImageSelected(event);
+  }
+
+  triggerFileInput(event: Event): void {
+    event.preventDefault();
+    if (this.fileInput) {
+      this.fileInput.nativeElement.click();
+    }
+  }
+
+  // Called by ngx-image-cropper when the image is cropped
+  imageCropped(event: any): void {
+    if (!event || !event.blob) {
+      this.croppedFile = null;
+      return;
+    }
+
+    const blob: Blob = event.blob;
+    this.croppedFile = new File([blob], 'profile-image.png', { type: blob.type || 'image/png' });
+  }
+
+  saveCroppedImage(): void {
+    if (!this.croppedFile || !this.userId) {
+      this.showCropper = false;
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', this.croppedFile);
+
+    this.http.post(`${this.apiUrl}/users/${this.userId}/profile-image`, formData, {
+      headers: this.getAuthHeaders()
+    }).subscribe({
+      next: () => {
+        this.setProfileImageUrl();
+        this.showCropper = false;
+        this.imageChangedEvent = '';
+        this.croppedFile = null;
+      },
+      error: (error: any) => {
+        console.error('Failed to upload profile image', error);
+        this.showCropper = false;
+      }
+    });
+  }
+
+  cancelCrop(): void {
+    this.showCropper = false;
+    this.imageChangedEvent = '';
+    this.croppedFile = null;
+  }
+
+  resetCropper(): void {
+    this.imageChangedEvent = null;
+    this.croppedFile = null;
+  }
+
+  connectWithTeacher(teacher: Teacher): void {
+    console.log('Connecting with teacher:', teacher.name);
+    // TODO: Implement connection logic (API call, notification, etc.)
+    // For now, just show a success message
+    alert(`Connection request sent to ${teacher.name}!`);
+  }
+
+  navigateToPricing(): void {
+    // TODO: Navigate to pricing page when it's created
+    alert('Pricing page coming soon!');
+  }
+
 }

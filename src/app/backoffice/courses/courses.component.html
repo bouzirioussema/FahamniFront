@@ -1,0 +1,136 @@
+<section class="users-section">
+  <div class="section-header">
+    <div class="header-left-section">
+      <h2>Courses</h2>
+      <p class="dashboard-subtitle">Overview of all courses available on the platform.</p>
+    </div>
+    <div class="courses-filters">
+      <div class="search-box">
+        <i class="material-icons">search</i>
+        <input
+          type="text"
+          placeholder="Search by title or domain..."
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="onSearchChange()"
+        />
+      </div>
+      <select class="courses-select" [(ngModel)]="selectedDomain" (change)="onFilterChange()">
+        <option value="ALL">All Domains</option>
+        <option *ngFor="let domain of domains" [value]="domain">{{ domain }}</option>
+      </select>
+      <select class="courses-select" [(ngModel)]="selectedStatus" (change)="onFilterChange()">
+        <option value="ALL">All Status</option>
+        <option value="PUBLIC">Public</option>
+        <option value="PRIVATE">Private</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    <span>Loading courses...</span>
+  </div>
+
+  <div *ngIf="error" class="alert alert-error">
+    <span>{{ error }}</span>
+  </div>
+
+  <div *ngIf="!loading && !error">
+    <div class="courses-table-wrapper">
+      <table class="courses-table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Teacher</th>
+          <th>Title</th>
+          <th>Domain</th>
+          <th>Level</th>
+          <th>Duration (h)</th>
+          <th>Status</th>
+          <th>Videos</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let course of filteredCourses" (click)="selectCourse(course)" class="course-row">
+          <td>{{ course.id }}</td>
+          <td>{{ getTeacherName(course.teacherId) }}</td>
+          <td>{{ course.title }}</td>
+          <td>{{ course.category }}</td>
+          <td>{{ course.level }}</td>
+          <td>{{ course.durationInHours }}</td>
+          <td>
+          <span class="status-pill" [class.status-public]="course.published" [class.status-private]="!course.published">
+            {{ course.published ? 'Public' : 'Private' }}
+          </span>
+          </td>
+          <td>
+            {{ (course.videos && course.videos.length) ? course.videos.length : (course.videoUrl ? 1 : 0) }}
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Course Detail Overlay (same place, above table) -->
+  <div *ngIf="selectedCourse" class="course-detail-overlay">
+    <div class="course-detail-panel">
+      <div class="course-detail-header">
+        <div class="course-detail-title-block">
+          <div class="course-detail-icon">
+            <i class="material-icons">menu_book</i>
+          </div>
+          <div>
+            <h3>{{ selectedCourse.title }}</h3>
+            <p class="detail-subtitle">
+              Teacher: {{ getTeacherName(selectedCourse.teacherId) }}
+            </p>
+          </div>
+        </div>
+        <div class="course-detail-header-right">
+          <span class="status-chip" [class.status-chip-public]="selectedCourse.published" [class.status-chip-private]="!selectedCourse.published">
+            {{ selectedCourse.published ? 'Public' : 'Private' }}
+          </span>
+          <button class="btn-detail-close" (click)="closeDetails()">
+            <i class="material-icons">close</i>
+          </button>
+        </div>
+      </div>
+
+      <div class="course-detail-body">
+        <p class="detail-description">{{ selectedCourse.description }}</p>
+
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="label">Domain</span>
+            <span class="value">{{ selectedCourse.category }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Level</span>
+            <span class="value">{{ selectedCourse.level }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Duration</span>
+            <span class="value">{{ selectedCourse.durationInHours }} h</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Videos</span>
+            <span class="value">
+              {{ (selectedCourse.videos && selectedCourse.videos.length) ? selectedCourse.videos.length : (selectedCourse.videoUrl ? 1 : 0) }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-detail-actions">
+        <button class="btn-detail-toggle" (click)="toggleCourseStatus(selectedCourse)">
+          <i class="material-icons">sync_alt</i>
+          {{ selectedCourse.published ? 'Set Private' : 'Set Public' }}
+        </button>
+        <button class="btn-detail-delete" (click)="deleteCourse(selectedCourse)">
+          <i class="material-icons">delete</i>
+          Delete Course
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

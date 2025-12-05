@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
-import {AuthService} from "../login/AuthService";
+import { AuthService } from "../login/AuthService";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-teacher',
@@ -14,8 +15,19 @@ export class TeacherComponent implements OnInit {
   email: string = 'teacher@email.com';
   role: string = 'Teacher';
   initials: string = 'TN';
+  profileImageUrl: string | null = null;
+  // State for image cropping
+  showCropper: boolean = false;
+  imageChangedEvent: any = '';
+  croppedFile: File | null = null;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  private apiUrl = 'http://localhost:8082/api';
+
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
+  constructor(private authService: AuthService,
+              private router: Router,
+              private http: HttpClient) { }
 
   ngOnInit(): void {
     this.userId = this.authService.getUserId(); // Retrieve userId from AuthService
@@ -40,6 +52,10 @@ export class TeacherComponent implements OnInit {
       // Capitalize first letter and make rest lowercase
       this.role = roleText.charAt(0).toUpperCase() + roleText.slice(1).toLowerCase();
     }
+
+    if (this.userId) {
+      this.setProfileImageUrl();
+    }
   }
   
   getInitials(name: string): string {
@@ -61,5 +77,94 @@ export class TeacherComponent implements OnInit {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('jwtToken');
+    const headersConfig: any = {};
+    if (token) {
+      headersConfig['Authorization'] = `Bearer ${token}`;
+    }
+    return new HttpHeaders(headersConfig);
+  }
+
+  private setProfileImageUrl(): void {
+    if (!this.userId) {
+      return;
+    }
+    this.profileImageUrl = `${this.apiUrl}/users/${this.userId}/profile-image?t=${Date.now()}`;
+  }
+
+  triggerFileInput(event: Event): void {
+    event.preventDefault();
+    if (this.fileInput) {
+      this.fileInput.nativeElement.click();
+    }
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0 || !this.userId) {
+      return;
+    }
+    // Open cropper with selected image instead of uploading directly
+    this.imageChangedEvent = event;
+    this.showCropper = true;
+  }
+
+  imageCropped(event: any): void {
+    if (!event || !event.blob) {
+      this.croppedFile = null;
+      return;
+    }
+
+    const blob: Blob = event.blob;
+    this.croppedFile = new File([blob], 'profile-image.png', { type: blob.type || 'image/png' });
+  }
+
+  saveCroppedImage(): void {
+    if (!this.croppedFile || !this.userId) {
+      this.showCropper = false;
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', this.croppedFile);
+
+    this.http.post(`${this.apiUrl}/users/${this.userId}/profile-image`, formData, {
+      headers: this.getAuthHeaders()
+    }).subscribe({
+      next: () => {
+        this.setProfileImageUrl();
+        this.showCropper = false;
+        this.imageChangedEvent = '';
+        this.croppedFile = null;
+      },
+      error: (error: any) => {
+        console.error('Failed to upload profile image', error);
+        this.showCropper = false;
+      }
+    });
+  }
+
+  cancelCrop(): void {
+    this.showCropper = false;
+    this.imageChangedEvent = '';
+    this.croppedFile = null;
+  }
+
+  resetCropper(): void {
+    this.imageChangedEvent = null;
+    this.croppedFile = null;
+  }
+
+  viewMyCourses(): void {
+    if (this.userId) {
+      this.router.navigate([`/teacher/${this.userId}/courses`]);
+    }
+  }
+
+  isCoursesPage(): boolean {
+    return this.router.url.includes('/courses');
   }
 }

@@ -1,0 +1,59 @@
+<section class="subscriptions-section">
+  <div class="subscriptions-header">
+    <h2>Subscriptions Management</h2>
+    <p class="subtitle">User subscriptions overview</p>
+  </div>
+
+  <div class="subscriptions-toolbar">
+    <div class="toolbar-inner">
+      <div class="search-group">
+        <span class="material-icons search-icon">search</span>
+        <input
+          type="text"
+          placeholder="Search users..."
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()"
+        />
+      </div>
+
+      <div class="filter-group">
+        <select id="planFilter" [(ngModel)]="selectedPlan" (change)="onPlanFilterChange()">
+          <option value="ALL">All Plans</option>
+          <option value="ONE_MONTH">1 Month</option>
+          <option value="SIX_MONTHS">6 Months</option>
+          <option value="ONE_YEAR">1 Year</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="info-text">Loading subscriptions...</div>
+  <div *ngIf="!loading && error" class="error-text">{{ error }}</div>
+
+  <table *ngIf="!loading && !error && filteredSubscriptions.length" class="subscriptions-table">
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>Email</th>
+        <th>Plan</th>
+        <th>Amount</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let sub of filteredSubscriptions">
+        <td>{{ sub.username }}</td>
+        <td>{{ sub.email }}</td>
+        <td class="plan-cell">
+          <span class="badge" [ngClass]="getPlanClass(sub.plan)">{{ getPlanLabel(sub.plan) }}</span>
+        </td>
+        <td>{{ sub.amountLabel }}</td>
+        <td>{{ sub.createdAt | date:'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && !error && !filteredSubscriptions.length" class="info-text">
+    No subscriptions found.
+  </div>
+</section>

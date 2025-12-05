@@ -22,6 +22,34 @@ interface UserStats {
   verifiedCount: number;
 }
 
+interface SubscriptionStats {
+  totalPayments: number;
+  oneMonthCount: number;
+  sixMonthsCount: number;
+  oneYearCount: number;
+  mostPopularPlan: string;
+}
+
+interface Course {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  durationInHours: number;
+  level: string;
+  imageUrl: string;
+  published: boolean;
+  teacherId: string;
+  videoUrl?: string;
+  videos?: any[];
+}
+
+interface CourseStats {
+  totalCourses: number;
+  totalVideos: number;
+  byDomain: { [category: string]: number };
+}
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -39,6 +67,20 @@ export class DashboardComponent implements OnInit {
     studentCount: 0,
     verifiedCount: 0
   };
+  subscriptionStats: SubscriptionStats = {
+    totalPayments: 0,
+    oneMonthCount: 0,
+    sixMonthsCount: 0,
+    oneYearCount: 0,
+    mostPopularPlan: ''
+  };
+
+  courseStats: CourseStats = {
+    totalCourses: 0,
+    totalVideos: 0,
+    byDomain: {}
+  };
+  courses: Course[] = [];
   
   // UI State
   loading = false;
@@ -65,6 +107,7 @@ export class DashboardComponent implements OnInit {
   };
 
   private apiUrl = 'http://localhost:8082/api';
+  private coursesApiUrl = 'http://localhost:8082/teacher/courses';
 
   constructor(private router: Router, private http: HttpClient) {}
 
@@ -72,6 +115,8 @@ export class DashboardComponent implements OnInit {
     this.loadCurrentUserInfo();
     this.loadUsers();
     this.loadStats();
+    this.loadSubscriptionStats();
+    this.loadCourseStats();
   }
 
   loadCurrentUserInfo(): void {
@@ -107,6 +152,39 @@ export class DashboardComponent implements OnInit {
       });
   }
 
+  loadCourseStats(): void {
+    this.http.get<Course[]>(this.coursesApiUrl).subscribe({
+      next: (courses: Course[]) => {
+        this.courses = courses;
+        this.computeCourseStats();
+      },
+      error: (error: any) => {
+        console.error('Failed to load course stats:', error);
+      }
+    });
+  }
+
+  computeCourseStats(): void {
+    const stats: CourseStats = {
+      totalCourses: this.courses.length,
+      totalVideos: 0,
+      byDomain: {}
+    };
+
+    this.courses.forEach(c => {
+      const videoCount = (c.videos && c.videos.length)
+        ? c.videos.length
+        : (c.videoUrl ? 1 : 0);
+
+      stats.totalVideos += videoCount;
+
+      const cat = c.category || 'Other';
+      stats.byDomain[cat] = (stats.byDomain[cat] || 0) + 1;
+    });
+
+    this.courseStats = stats;
+  }
+
   loadStats(): void {
     this.http.get<UserStats>(`${this.apiUrl}/admin/stats`, { headers: this.getAuthHeaders() })
       .subscribe({
@@ -115,6 +193,18 @@ export class DashboardComponent implements OnInit {
         },
         error: (error: any) => {
           console.error('Failed to load stats:', error);
+        }
+      });
+  }
+
+  loadSubscriptionStats(): void {
+    this.http.get<SubscriptionStats>(`${this.apiUrl}/admin/subscription-stats`, { headers: this.getAuthHeaders() })
+      .subscribe({
+        next: (stats: SubscriptionStats) => {
+          this.subscriptionStats = stats;
+        },
+        error: (error: any) => {
+          console.error('Failed to load subscription stats:', error);
         }
       });
   }

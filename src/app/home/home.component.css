@@ -1,0 +1,17 @@
+/* Center the main navigation menu and keep Sign in on the right */
+.header_area .navbar .navbar-collapse {
+  display: flex;
+  align-items: center;
+}
+
+.header_area .navbar .navbar-collapse .navbar-nav.menu_nav {
+  margin: 0 auto;
+}
+
+.header_area .navbar .navbar-collapse .sign-in-link {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}

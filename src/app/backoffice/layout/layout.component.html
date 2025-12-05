@@ -23,8 +23,14 @@
             <span>Users</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link">
+        <li class="nav-item" [class.active]="isActiveRoute('/backoffice/subscriptions')">
+          <a routerLink="/backoffice/subscriptions" class="nav-link" (click)="navigateToAbsolute('/backoffice/subscriptions')">
+            <i class="material-icons">paid</i>
+            <span>Subscriptions</span>
+          </a>
+        </li>
+        <li class="nav-item" [class.active]="isActiveRoute('/backoffice/courses')">
+          <a routerLink="/backoffice/courses" class="nav-link" (click)="navigateToAbsolute('/backoffice/courses')">
             <i class="material-icons">school</i>
             <span>Courses</span>
           </a>

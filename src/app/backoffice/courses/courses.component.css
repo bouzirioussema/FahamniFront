@@ -1,0 +1,261 @@
+.courses-table-wrapper {
+  overflow-x: auto;
+}
+
+.courses-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.courses-table th,
+.courses-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.courses-table th {
+  background: #f9fafb;
+  font-weight: 500;
+  color: #374151;
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.status-public {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.status-private {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.courses-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.courses-select {
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 0.8rem;
+  background-color: #ffffff;
+  color: #374151;
+}
+
+.courses-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-box input {
+  padding: 0.4rem 0.75rem 0.4rem 2rem;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 0.8rem;
+  min-width: 220px;
+}
+
+.search-box i {
+  position: absolute;
+  left: 0.5rem;
+  color: #9ca3af;
+  font-size: 1rem;
+}
+
+.course-row {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.course-row:hover {
+  background-color: #f9fafb;
+}
+
+.course-detail-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+}
+
+.course-detail-panel {
+  width: 480px;
+  max-width: 95%;
+  padding: 1.25rem 1.5rem;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background-color: #ffffff;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.25);
+}
+
+.course-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.course-detail-title-block {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.course-detail-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.course-detail-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.detail-subtitle {
+  margin: 0.15rem 0 0;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.course-detail-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-chip {
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.status-chip-public {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.status-chip-private {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.btn-detail-close {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #9ca3af;
+  border-radius: 999px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-detail-close:hover {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.course-detail-body {
+  margin-bottom: 1rem;
+}
+
+.detail-description {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin-bottom: 1rem;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem 1.5rem;
+}
+
+.detail-item .label {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.detail-item .value {
+  display: block;
+  font-size: 0.9rem;
+  color: #111827;
+  font-weight: 500;
+}
+
+.course-detail-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.btn-detail-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  border: none;
+  background-color: #3b82f6;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-detail-toggle:hover {
+  background-color: #2563eb;
+}
+
+.btn-detail-delete {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  border: none;
+  background-color: #dc2626;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-detail-delete:hover {
+  background-color: #b91c1c;
+}

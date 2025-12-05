@@ -1,0 +1,53 @@
+<div class="pricing-page">
+  <h1 class="pricing-title">Abonnements</h1>
+
+  <div class="toggle-wrapper">
+    <button class="toggle-button active">Paiement unique</button>
+  </div>
+
+  <div class="plans-grid">
+    <div class="plan-card">
+      <h2>1 mois</h2>
+      <p class="price">30 DT</p>
+      <p class="subtitle">Accès complet pendant 30 jours</p>
+      <ul class="features">
+        <li>Accès à toutes les formations</li>
+        <li>Support standard</li>
+        <li>Certificat de fin de formation</li>
+      </ul>
+      <button class="plan-button" (click)="choosePlan('ONE_MONTH')">Choisir 1 mois</button>
+    </div>
+
+    <div class="plan-card recommended">
+      <div class="badge">Populaire</div>
+      <h2>6 mois</h2>
+      <p class="price">150 DT</p>
+      <p class="subtitle">Idéal pour un semestre complet</p>
+      <ul class="features">
+        <li>Tout le contenu inclus</li>
+        <li>Support prioritaire</li>
+        <li>Accès aux mises à jour des cours</li>
+      </ul>
+      <button class="plan-button" (click)="choosePlan('SIX_MONTHS')">Choisir 6 mois</button>
+    </div>
+
+    <div class="plan-card">
+      <h2>1 an</h2>
+      <p class="price">250 DT</p>
+      <p class="subtitle">Meilleur rapport qualité / prix</p>
+      <ul class="features">
+        <li>Accès illimité pendant 12 mois</li>
+        <li>Support premium</li>
+        <li>Accès anticipé aux nouvelles formations</li>
+      </ul>
+      <button class="plan-button" (click)="choosePlan('ONE_YEAR')">Choisir 1 an</button>
+    </div>
+  </div>
+
+  <div class="message" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+  <div class="message success" *ngIf="successMessage">
+    {{ successMessage }}
+  </div>
+</div>

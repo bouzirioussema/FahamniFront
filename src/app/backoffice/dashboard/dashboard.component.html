@@ -1,6 +1,9 @@
 <!-- Dashboard Content -->
-    <!-- Stats Cards -->
+    <!-- User Stats Cards -->
     <section class="stats-section">
+      <div class="section-header">
+        <h2>User Overview</h2>
+      </div>
       <div class="stats-grid">
         <div class="stat-card total">
           <div class="stat-icon">
@@ -39,6 +42,108 @@
           <div class="stat-content">
             <h3>{{ stats.studentCount }}</h3>
             <p>Students</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Course Stats -->
+    <section class="stats-section">
+      <div class="section-header">
+        <h2>Course Overview</h2>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card total">
+          <div class="stat-icon">
+            <i class="material-icons">menu_book</i>
+          </div>
+          <div class="stat-content">
+            <h3>{{ courseStats.totalCourses }}</h3>
+            <p>Total Courses</p>
+          </div>
+        </div>
+
+        <div class="stat-card teacher">
+          <div class="stat-icon">
+            <i class="material-icons">smart_display</i>
+          </div>
+          <div class="stat-content">
+            <h3>{{ courseStats.totalVideos }}</h3>
+            <p>Total Videos</p>
+          </div>
+        </div>
+
+        <div class="stat-card student" *ngFor="let domain of (courseStats.byDomain | keyvalue)">
+          <div class="stat-icon">
+            <i class="material-icons">category</i>
+          </div>
+          <div class="stat-content">
+            <h3>{{ domain.value }}</h3>
+            <p>{{ domain.key }} Courses</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Subscription Stats Cards -->
+    <section class="stats-section">
+      <div class="section-header">
+        <h2>Subscription Overview</h2>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card total">
+          <div class="stat-icon">
+            <i class="material-icons">paid</i>
+          </div>
+          <div class="stat-content">
+            <h3>{{ subscriptionStats.totalPayments }}</h3>
+            <p>Total Subscriptions</p>
+          </div>
+        </div>
+
+        <div class="stat-card teacher">
+          <div class="stat-icon">
+            <i class="material-icons">calendar_view_month</i>
+          </div>
+          <div class="stat-content">
+            <h3>{{ subscriptionStats.oneMonthCount }}</h3>
+            <p>1 Month Plan</p>
+          </div>
+        </div>
+
+        <div class="stat-card student">
+          <div class="stat-icon">
+            <i class="material-icons">calendar_view_week</i>
+          </div>
+          <div class="stat-content">
+            <h3>{{ subscriptionStats.sixMonthsCount }}</h3>
+            <p>6 Months Plan</p>
+          </div>
+        </div>
+
+        <div class="stat-card admin">
+          <div class="stat-icon">
+            <i class="material-icons">calendar_today</i>
+          </div>
+          <div class="stat-content">
+            <h3>{{ subscriptionStats.oneYearCount }}</h3>
+            <p>1 Year Plan</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Most Popular Plan -->
+    <section class="stats-section" *ngIf="subscriptionStats.mostPopularPlan">
+      <div class="stats-grid">
+        <div class="stat-card highlight">
+          <div class="stat-icon">
+            <i class="material-icons">leaderboard</i>
+          </div>
+          <div class="stat-content">
+            <h3>{{ subscriptionStats.mostPopularPlan }}</h3>
+            <p>Most Popular Subscription Plan</p>
           </div>
         </div>
       </div>

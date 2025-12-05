@@ -65,3 +65,13 @@
     font-size: 16px !important;
   }
 }
+
+/* Fix horizontal overflow from courses carousel on teacher page */
+.popular_courses {
+  overflow-x: hidden;
+}
+
+.popular_courses .owl-nav {
+  width: 100% !important;
+  left: 0 !important;
+}

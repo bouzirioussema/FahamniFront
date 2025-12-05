@@ -1,0 +1,244 @@
+.ctp-wrapper {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 40px;
+  font-family: Arial, sans-serif;
+}
+
+.ctp-card {
+  width: 520px;
+  background-color: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* En-tête logo */
+.ctp-header {
+  padding: 16px 24px 8px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.ctp-logo-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ctp-logo-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #f57c00, #c62828);
+}
+
+.ctp-logo-text .main {
+  font-weight: bold;
+  color: #444;
+}
+.ctp-logo-text .ext {
+  font-weight: bold;
+  color: #c62828;
+}
+.ctp-logo-text .sub {
+  font-size: 11px;
+  color: #777;
+}
+
+/* Corps */
+.ctp-body {
+  padding: 20px 24px 24px;
+}
+
+.ctp-title {
+  font-size: 20px;
+  margin: 0 0 6px 0;
+}
+
+.ctp-order-number {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.ctp-session-info {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 18px;
+}
+
+/* Formulaire */
+.ctp-form {
+  margin-top: 8px;
+}
+
+.ctp-form-group {
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ctp-form-group label {
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.ctp-input-with-icon {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cfcfcf;
+  border-radius: 3px;
+  background-color: #fafafa;
+}
+
+.ctp-input-with-icon .icon {
+  padding: 0 8px;
+  color: #777;
+}
+
+.ctp-input-with-icon input {
+  border: none;
+  flex: 1;
+  padding: 8px;
+  font-size: 14px;
+  background: transparent;
+}
+
+.ctp-input-with-icon input:focus {
+  outline: none;
+}
+
+/* Ligne mois / année / CVV */
+.ctp-form-row {
+  display: flex;
+  gap: 8px;
+}
+
+.ctp-form-row .ctp-form-group {
+  flex: 1;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+  padding: 8px;
+  border-radius: 3px;
+  border: 1px solid #cfcfcf;
+  font-size: 14px;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #1976d2;
+  box-shadow: 0 0 0 1px rgba(25, 118, 210, 0.2);
+}
+
+.ctp-email-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+/* Bouton bleu */
+.ctp-submit {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 3px;
+  background-color: #0052cc;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.ctp-submit[disabled] {
+  opacity: 0.7;
+  cursor: default;
+}
+
+/* Messages */
+.ctp-message {
+  margin-top: 10px;
+  font-size: 13px;
+}
+.ctp-message.error {
+  color: #c62828;
+}
+.ctp-message.success {
+  color: #2e7d32;
+}
+
+/* Popup de succès type "Thank You" */
+.ctp-success-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.ctp-success-modal {
+  padding: 32px 24px 28px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+  text-align: center;
+  width: 260px;
+}
+
+.ctp-success-icon-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.ctp-success-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background-color: #43b581;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.ctp-success-title {
+  margin: 0 0 8px 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #333333;
+}
+
+.ctp-success-text {
+  margin: 0 0 20px 0;
+  font-size: 14px;
+  color: #555555;
+}
+
+.ctp-success-button {
+  min-width: 120px;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 24px;
+  background-color: #43b581;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ctp-success-button:hover {
+  background-color: #36a06f;
+}

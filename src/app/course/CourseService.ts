@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Course } from './course';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -11,8 +10,12 @@ export class CourseService {
 
   constructor(private http: HttpClient) {}
 
-  getAllCourses(): Observable<Course[]> {
-    return this.http.get<Course[]>(`${this.apiUrl}`);
+  getAllCourses(userId?: string): Observable<Course[]> {
+    if (userId) {
+      // ✅ utilise la nouvelle route backend
+      return this.http.get<Course[]>(`${this.apiUrl}/teacher/${userId}`);
+    }
+    return this.http.get<Course[]>(this.apiUrl);
   }
 
   getCourseById(id: number): Observable<Course> {
@@ -29,5 +32,17 @@ export class CourseService {
 
   deleteCourse(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  uploadCourseVideo(courseId: number, file: File): Observable<Course> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<Course>(`${this.apiUrl}/${courseId}/video`, formData);
+  }
+
+  uploadCourseThumbnail(courseId: number, file: File): Observable<Course> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<Course>(`${this.apiUrl}/${courseId}/thumbnail`, formData);
   }
 }
